@@ -19,6 +19,8 @@ import {
 } from 'react-native';
 
 import CalculatorPage from './app/calculator-page'
+import SettingPage from './app/setting-page'
+import Utils from './app/utils'
 
 export default class RNTipCalculator extends Component {
 
@@ -32,36 +34,24 @@ export default class RNTipCalculator extends Component {
   }
 
   render() {
+
     return (
       <Navigator
-      initialRoute={{id: 'CalculatorPage', title: 'Tip Calculator Page'}}
-      renderScene={(route, navigator) => {
-        switch (route.id) {
-          case 'CalculatorPage':
-            return <CalculatorPage navigator={navigator} />
-            break;
-          case 'BlankPage':
-            return (
-              <View>
-                <Button
-                  style={{width:10, flex:0.1}}
-                  title="Go Back"
-                  onPress={() => navigator.pop({id:"CalculatorPage"})}
-                />
-
-                <View style={{flexDirection:'column'}}>
-                  <Text>Fck ya !!! I'm a blank page, I have nothing !</Text>
-                </View>
-
-              </View>
-            )
-            break;
-          default:
-        }
-      }}
-    />
-      
+        initialRoute={Utils.routes.CalculatorPage}
+        renderScene={(route, navigator) => {
+          switch (route.id) {
+            case Utils.routes.CalculatorPage.id:
+              return <CalculatorPage navigator={navigator} />
+              break;
+            case Utils.routes.SettingPage.id:
+              return <SettingPage navigator={navigator} />
+              break;
+            default:
+          }
+        }}
+      />
     )
+
   }
 }
 

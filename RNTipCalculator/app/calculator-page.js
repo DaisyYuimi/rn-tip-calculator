@@ -11,6 +11,8 @@ import {
   Button
 } from 'react-native';
 
+import Utils from './utils'
+
 export default class CalculatorPage extends Component {
 
   constructor(props) {
@@ -54,7 +56,7 @@ export default class CalculatorPage extends Component {
         <Button
             style={{width:30, flex:0.1}}
             title="Settings"
-            onPress={() => this.props.navigator.push({id:"BlankPage"})}
+            onPress={() => this.props.navigator.push(Utils.routes.SettingPage)}
           />
 
         <TouchableWithoutFeedback onPress={ () => {Keyboard.dismiss()} }>
