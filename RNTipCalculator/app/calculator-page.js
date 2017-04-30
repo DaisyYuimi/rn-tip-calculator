@@ -128,8 +128,8 @@ export default class CalculatorPage extends Component {
                 <Text>+ Tip percent: {this.state.tipPercent}% ({Utils.formatNumber(this.state.tipAmount, this.state.selectedCurrency)})</Text>
               </View>
 
-              <View>
-                <Text>Total: {Utils.formatNumber(this.state.result, this.state.selectedCurrency)}</Text>
+              <View style={{marginTop: 10}}>
+                <Text style={{fontWeight: "700"}}>Total: {Utils.formatNumber(this.state.result, this.state.selectedCurrency)}</Text>
               </View>
             </Animated.View>
           </View>

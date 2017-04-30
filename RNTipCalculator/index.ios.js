@@ -31,15 +31,15 @@ export default class RNTipCalculator extends Component {
         routeMapper={{ 
           LeftButton: (route, navigator, index, navState) => { 
             return ( 
-              <TouchableHighlight onPress={() => navigator.pop()}><Text>{route.labelLeft}</Text></TouchableHighlight> 
+              <TouchableHighlight onPress={() => navigator.pop()}><Text style={{fontSize: 20, color: "blue"}}>{route.labelLeft}</Text></TouchableHighlight> 
             ); 
           }, 
           RightButton: (route, navigator, index, navState) => {
             return ( 
-              <TouchableHighlight onPress={() => route.performRightAction()}><Text>{route.labelRight}</Text></TouchableHighlight> 
+              <TouchableHighlight onPress={() => route.performRightAction()}><Text style={{fontSize: 20, color: "blue"}}>{route.labelRight}</Text></TouchableHighlight> 
             ); 
           }, 
-          Title: (route, navigator, index, navState) => { return (<Text>{route.title}</Text>); }, }} 
+          Title: (route, navigator, index, navState) => { return (<Text style={{fontSize: 20, color: "red", fontWeight: '700'}}>{route.title}</Text>); }, }} 
       />
     )
   }
