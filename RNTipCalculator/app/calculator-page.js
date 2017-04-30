@@ -8,7 +8,8 @@ import {
   TouchableWithoutFeedback,
   TextInput,
   Slider,
-  Button
+  Button,
+  AsyncStorage
 } from 'react-native';
 
 import Utils from './utils'
@@ -21,13 +22,33 @@ export default class CalculatorPage extends Component {
     this.state = {
       billAmount: 0,
       selectedTipIndex: 0,
-      tipPercent: 10,
+      tipPercent: 5,
       tipAmount: 0,
-      result: 0
+      result: 0,
+      selectedMinTipValue: 1,
+      selectedMaxTipValue: 20,
+      selectedCurrency: "dong"
+    }
+
+    this.props.route.performRightAction = () => {
+      let settingPage = Utils.routes.SettingPage;
+      settingPage.parentPage = this;
+      this.props.navigator.push(settingPage);
     }
   }
   
+  getSettings() {
+    AsyncStorage.getItem("SAVED_SETTINGS", (error, value) => {
+      let setting = JSON.parse(value);
+      if (setting && setting["sceneTransition"]) {
+        this.setState(setting);
+      }
+      
+    });
+  }
+
   componentDidMount() { 
+    this.getSettings()
   }
 
   handleAmountChange(value) {
@@ -51,14 +72,7 @@ export default class CalculatorPage extends Component {
 
   render() {
     return (
-      
-      <View>
-        <Button
-            style={{width:30, flex:0.1}}
-            title="Settings"
-            onPress={() => this.props.navigator.push(Utils.routes.SettingPage)}
-          />
-
+      <View style={Utils.styles.container}>
         <TouchableWithoutFeedback onPress={ () => {Keyboard.dismiss()} }>
           <View>
 
@@ -68,18 +82,15 @@ export default class CalculatorPage extends Component {
 
             <View>
               <View>
-                <Slider minimumValue={10} maximumValue={50} step={10} onValueChange={ this.handleTipChanged.bind(this) } />
+                <Slider value={this.state.tipPercent} minimumValue={this.state.selectedMinTipValue} maximumValue={this.state.selectedMaxTipValue} step={1} onValueChange={ this.handleTipChanged.bind(this) } />
               </View>
 
               <View>
-                <Text>Bill amount: {this.state.billAmount}</Text>
-                <Text>Tip percent: {this.state.tipPercent}%</Text>
-                <Text>Tip amount: {this.state.tipAmount.toFixed(1)}</Text>
-                
+                <Text>+ Tip percent: {this.state.tipPercent}% ({Utils.formatNumber(this.state.tipAmount, this.state.selectedCurrency)})</Text>
               </View>
 
               <View>
-                <Text>Result: {this.state.result}</Text>
+                <Text>Total: {Utils.formatNumber(this.state.result, this.state.selectedCurrency)}</Text>
               </View>
             </View>
           </View>
