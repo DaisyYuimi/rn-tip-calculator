@@ -9,7 +9,8 @@ import {
   TextInput,
   Slider,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  Animated
 } from 'react-native';
 
 import Utils from './utils'
@@ -25,6 +26,8 @@ export default class CalculatorPage extends Component {
       tipPercent: 5,
       tipAmount: 0,
       result: 0,
+      marginTop: new Animated.Value(1000),
+      opacity: new Animated.Value(0),
       selectedMinTipValue: 1,
       selectedMaxTipValue: 20,
       selectedCurrency: "dong"
@@ -43,12 +46,11 @@ export default class CalculatorPage extends Component {
       if (setting && setting["sceneTransition"]) {
         this.setState(setting);
       }
-      
     });
   }
 
   componentDidMount() { 
-    this.getSettings()
+    this.getSettings();
   }
 
   handleAmountChange(value) {
@@ -57,6 +59,43 @@ export default class CalculatorPage extends Component {
     this.setState({ billAmount: billAmount }, () => {
       this.handleTipChanged(this.state.tipPercent);
     });
+
+    if (value > 0) {
+
+      Animated.timing(
+        this.state.marginTop,
+        {
+          toValue: 0,
+          duration: 300
+        }
+      ).start();
+
+      Animated.timing(
+        this.state.opacity,
+        {
+          toValue: 1,
+          duration: 500
+        }
+      ).start();
+
+    } else { 
+
+      Animated.timing(
+        this.state.marginTop,
+        {
+          toValue: 1000,
+          duration: 500
+        }
+      ).start();
+
+      Animated.timing(
+        this.state.opacity,
+        {
+            toValue: 0,
+            duration: 500
+        }
+      ).start();
+    }
   }
 
   handleTipChanged(value) {
@@ -80,7 +119,7 @@ export default class CalculatorPage extends Component {
               <TextInput autoFocus={true} keyboardType='numeric' style={{height: 40}} onChangeText={ this.handleAmountChange.bind(this) } placeholder="Enter Bill amount"/>
             </View>
 
-            <View>
+            <Animated.View style={{marginTop: this.state.marginTop, opacity: this.state.opacity}}>
               <View>
                 <Slider value={this.state.tipPercent} minimumValue={this.state.selectedMinTipValue} maximumValue={this.state.selectedMaxTipValue} step={1} onValueChange={ this.handleTipChanged.bind(this) } />
               </View>
@@ -92,7 +131,7 @@ export default class CalculatorPage extends Component {
               <View>
                 <Text>Total: {Utils.formatNumber(this.state.result, this.state.selectedCurrency)}</Text>
               </View>
-            </View>
+            </Animated.View>
           </View>
         </TouchableWithoutFeedback>
       </View>
